@@ -1,12 +1,14 @@
 import React from 'react'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { connect } from 'react-redux'
-import { setNotification, removeNotification } from '../reducers/notificationReducer'
+import { notify } from '../reducers/notificationReducer'
 
-const AnecdoteForm = ({ createAnecdote, setNotification, removeNotification }) => {
-    const handleSubmit = (e) => {
+const AnecdoteForm = ({ createAnecdote, notify }) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+
         const content = e.target.anecdote.value
+        e.target.anecdote.value = ''
 
         if (!content) {
             return
@@ -14,14 +16,7 @@ const AnecdoteForm = ({ createAnecdote, setNotification, removeNotification }) =
 
         createAnecdote(content)
 
-        e.target.anecdote.value = ''
-
-        notify(`new anecdote '${content}' created!`)
-    }
-
-    const notify = (notification) => {
-        setNotification(notification)
-        setTimeout(removeNotification, 5000)
+        notify(`new anecdote '${content}' created!`, 5000)
     }
 
     return (
@@ -37,8 +32,7 @@ const AnecdoteForm = ({ createAnecdote, setNotification, removeNotification }) =
 
 const mapDispatchToProps = {
     createAnecdote,
-    setNotification,
-    removeNotification
+    notify
 }
 
 export default connect(null, mapDispatchToProps)(AnecdoteForm)
