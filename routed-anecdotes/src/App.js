@@ -1,13 +1,26 @@
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
 import React from 'react'
 
-const Menu = () => (
-  <div>
-    <Link to="/">anecdotes</Link> &nbsp;
-    <Link to="/create">create new</Link> &nbsp;
-    <Link to="/about">about</Link>
-  </div>
-)
+const Menu = () => {
+  const menuStyle = {
+    padding: 20,
+    backgroundColor: 'lightblue',
+  }
+
+  const activeStyle = {
+    backgroundColor: 'lightgrey',
+    fontWeight: 'bold',
+    padding: 'inherit'
+  }
+
+  return (
+    <div style={menuStyle}>
+      <NavLink exact to="/" activeStyle={activeStyle}>anecdotes</NavLink> &nbsp;
+      <NavLink exact to="/create" activeStyle={activeStyle}>create new</NavLink> &nbsp;
+      <NavLink exact to="/about" activeStyle={activeStyle}>about</NavLink>
+    </div>
+  )
+}
 
 const Anecdote = ({ anecdote }) => (
   <div>
@@ -163,7 +176,7 @@ class App extends React.Component {
           <div>
             <h1>Software anecdotes</h1>
             <Menu />
-            {this.state.notification}
+            <Notification notification={this.state.notification} />
             <Route exact path="/" render={() => <AnecdoteList anecdotes={this.state.anecdotes} />} />
             <Route path="/create" render={({ history }) =>
               <CreateNew history={history} addNew={this.addNew} handleNotification={this.notify} />}
@@ -178,6 +191,25 @@ class App extends React.Component {
       </div>
     );
   }
+}
+
+const Notification = ({ notification }) => {
+  const containerStyle = {
+    display: notification ? '' : 'none',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderColor: 'green',
+    borderRadius: 10,
+    marginTop: 10,
+    color: 'green',
+    padding: 10
+  }
+
+  return (
+    <div style={containerStyle}>
+      {notification}
+    </div>
+  )
 }
 
 export default App;
